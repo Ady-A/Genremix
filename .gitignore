@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+data/hint_cache.db*
+data/songs.db*
+data/spotify_millsongdata.csv
+data/spotify_millsongdata.csv.zip
+*.db-shm
+*.db-wal
