@@ -66,7 +66,7 @@ def _get_model() -> genai.GenerativeModel:
 
 # ── SQLite cache ───────────────────────────────────────────────────────────────
 
-DB_PATH = Path("data/hint_cache.db")
+DB_PATH = Path("/tmp/genre_cache.db" if os.getenv("VERCEL") else "data/hint_cache.db")
 _db: Optional[sqlite3.Connection] = None
 
 

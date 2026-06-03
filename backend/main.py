@@ -13,11 +13,8 @@ from typing import Optional
 from dotenv import load_dotenv
 load_dotenv()
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-
-from fastapi import WebSocket
 
 from . import cache as hint_cache
 from . import song_db
@@ -247,6 +244,13 @@ async def genre_poles():
     return GENRE_POLES
 
 
-# ── Serve frontend ─────────────────────────────────────────────────────────────
+@app.get("/api/capabilities")
+async def capabilities():
+    return {"websockets": not bool(os.getenv("VERCEL"))}
 
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+
+# ── Serve frontend (local dev only — Vercel serves public/ via CDN) ────────────
+
+if not os.getenv("VERCEL"):
+    from fastapi.staticfiles import StaticFiles
+    app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

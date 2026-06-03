@@ -3,13 +3,15 @@ SQLite-backed hint cache keyed on "title:artist" so it works for live songs
 with no local dataset ID. Thread-safe via WAL mode.
 """
 import json
+import os
 import sqlite3
 from pathlib import Path
 from typing import Optional
 
 from .models import HintBundle, JargonTranslation
 
-DB_PATH = Path("data/hint_cache.db")
+# Vercel has a read-only filesystem except /tmp
+DB_PATH = Path("/tmp/hint_cache.db" if os.getenv("VERCEL") else "data/hint_cache.db")
 
 
 def _conn() -> sqlite3.Connection:
