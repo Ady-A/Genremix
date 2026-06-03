@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: genremix
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: GENIUS_ACCESS_TOKEN
+        sync: false
+      - key: LASTFM_API_KEY
+        sync: false
+      - key: DATASET_PATH
+        value: data/songs.csv

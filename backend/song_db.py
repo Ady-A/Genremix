@@ -24,7 +24,7 @@ from .lyrics import fetch_lyrics
 
 log = logging.getLogger("song_db")
 
-DB_PATH   = Path("/tmp/songs.db" if os.getenv("VERCEL") else "data/songs.db")
+DB_PATH = Path("data/songs.db")
 LASTFM    = "https://ws.audioscrobbler.com/2.0/"
 LASTFM_TAGS = [
     "rock", "pop", "hip-hop", "r-n-b", "electronic", "country",
@@ -50,8 +50,7 @@ _count = 0
 def _get_db() -> sqlite3.Connection:
     global _db
     if _db is None:
-        if not os.getenv("VERCEL"):
-            DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
         _db = sqlite3.connect(str(DB_PATH), check_same_thread=False)
         _db.execute("PRAGMA journal_mode=WAL")
         _db.execute("PRAGMA cache_size=-32000")

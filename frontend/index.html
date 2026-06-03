@@ -119,8 +119,8 @@ input:focus{outline:none;}
       class="px-7 py-3 rounded-xl border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed">
       Random Song
     </button>
-    <button id="btn-multi" onclick="Multi.showLobbyEntry()"
-      class="px-7 py-3 rounded-xl border border-orange-700/60 hover:border-orange-500 text-orange-400 hover:text-orange-300 font-semibold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+    <button onclick="Multi.showLobbyEntry()"
+      class="px-7 py-3 rounded-xl border border-orange-700/60 hover:border-orange-500 text-orange-400 hover:text-orange-300 font-semibold text-sm transition-all">
       ⚔️ Multiplayer
     </button>
   </div>
@@ -692,19 +692,11 @@ document.addEventListener('click', e => {
   if (!e.target.closest('#search-wrap')) document.getElementById('song-dropdown').classList.remove('open');
 });
 
-// Pool size + capability check on landing
+// Pool size on landing
 (async () => {
   try {
     const d = await (await fetch(API + '/api/stats')).json();
     document.getElementById('pool-size').textContent = d.total.toLocaleString() + ' songs in pool';
-  } catch {}
-  try {
-    const c = await (await fetch(API + '/api/capabilities')).json();
-    if (!c.websockets) {
-      const btn = document.getElementById('btn-multi');
-      btn.disabled = true;
-      btn.title = 'Multiplayer requires a self-hosted backend (WebSockets not supported on Vercel)';
-    }
   } catch {}
 })();
 

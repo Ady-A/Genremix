@@ -38,7 +38,20 @@ A multiplayer song-guessing game built on a 2D genre map. A secret song is place
 
 ---
 
-## Setup
+## Deployment (Render)
+
+1. Connect the GitHub repo in your [Render](https://render.com) dashboard
+2. Render auto-detects `render.yaml` — the build and start commands are pre-configured
+3. Add environment variables in the Render dashboard:
+   - `GOOGLE_API_KEY` ← required
+   - `GENIUS_ACCESS_TOKEN` ← optional
+   - `LASTFM_API_KEY` ← optional
+
+Render runs FastAPI as a persistent process so WebSockets (multiplayer) work out of the box.
+
+---
+
+## Local Setup
 
 ### 1. Clone & install
 
@@ -52,29 +65,17 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
+# fill in GOOGLE_API_KEY at minimum
 ```
 
-Edit `.env` and fill in:
+### 3. Add a song dataset (optional)
 
-```env
-GOOGLE_API_KEY=...        # Required — Gemini API key (aistudio.google.com)
-GENIUS_ACCESS_TOKEN=...   # Optional — improves lyrics fallback (genius.com/api-clients)
-LASTFM_API_KEY=...        # Optional — seeds ~10k songs if no CSV present (last.fm/api)
-DATASET_PATH=data/spotify_millsongdata.csv  # path to your lyrics CSV
-```
-
-### 3. Add a song dataset
-
-The game works out of the box with a built-in list of ~500 songs. For the full experience, download the [Spotify Million Song Dataset](https://www.kaggle.com/datasets/notshrirang/spotify-million-song-dataset) from Kaggle and place it at `data/spotify_millsongdata.csv`.
-
-Supported CSV column names are auto-detected (`song`/`title`, `artist`, `text`/`lyrics`, `year`, `genre`).
+Works out of the box with a built-in list of ~500 songs. For the full 57k-song experience, download the [Spotify Million Song Dataset](https://www.kaggle.com/datasets/notshrirang/spotify-million-song-dataset) from Kaggle and place it at `data/songs.csv`.
 
 ### 4. Run
 
 ```bash
 ./run.sh
-# or
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Open `http://localhost:8000` in your browser.
