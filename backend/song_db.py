@@ -250,8 +250,9 @@ def search(query: str, limit: int = 12) -> list[dict]:
 
 
 async def get_song(title: str, artist: str,
-                    genius_token: Optional[str] = None) -> Optional[SongData]:
-    """Return a SongData with lyrics, fetching lyrics if missing."""
+                    genius_token: Optional[str] = None,
+                    require_lyrics: bool = True) -> Optional[SongData]:
+    """Return a SongData, fetching lyrics if missing and require_lyrics is True."""
     db = _get_db()
     row = db.execute(
         "SELECT id, title, artist, year, genre, lyrics FROM songs "
@@ -271,10 +272,10 @@ async def get_song(title: str, artist: str,
     sid, rtitle, rartist, ryear, rgenre, rlyrics = row
     if not rlyrics or len(rlyrics) < 100:
         rlyrics = await ensure_lyrics(sid, rtitle, rartist, genius_token=genius_token)
-    if not rlyrics:
+    if not rlyrics and require_lyrics:
         return None
     return SongData(id=sid, title=rtitle, artist=rartist,
-                    lyrics=rlyrics, year=ryear, genre=rgenre)
+                    lyrics=rlyrics or None, year=ryear, genre=rgenre)
 
 
 async def pick_random(genius_token: Optional[str] = None) -> Optional[SongData]:

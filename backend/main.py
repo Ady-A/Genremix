@@ -107,9 +107,9 @@ async def submit_guess(body: dict):
         raise HTTPException(400, "Game already over")
 
     genius_token = os.getenv("GENIUS_ACCESS_TOKEN") or None
-    song = await song_db.get_song(title, artist, genius_token=genius_token)
+    song = await song_db.get_song(title, artist, genius_token=genius_token, require_lyrics=False)
     if not song:
-        raise HTTPException(404, "Could not find lyrics for that song — try another")
+        raise HTTPException(404, "Song not found — try another")
 
     if any(g["title"].lower() == song.title.lower() and
            g["artist"].lower() == song.artist.lower()

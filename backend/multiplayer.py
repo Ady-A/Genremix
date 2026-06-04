@@ -213,7 +213,7 @@ async def handle_websocket(ws: WebSocket) -> None:
                     continue
 
                 genius_token = os.getenv("GENIUS_ACCESS_TOKEN") or None
-                song = await song_db.get_song(title, artist, genius_token=genius_token)
+                song = await song_db.get_song(title, artist, genius_token=genius_token, require_lyrics=False)
                 if not song:
                     await _send(player, {"type": "error", "message": "Song not found — try another"})
                     continue

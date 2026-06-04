@@ -6,7 +6,7 @@ class SongData(BaseModel):
     id: int
     title: str
     artist: str
-    lyrics: str
+    lyrics: Optional[str] = None
     year: Optional[int] = None
     genre: Optional[str] = None
 

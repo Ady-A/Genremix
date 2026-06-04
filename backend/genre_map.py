@@ -118,7 +118,7 @@ def analyze_genres(song: SongData) -> dict[str, float]:
     prompt = (
         f"Title: {song.title}\nArtist: {song.artist}\n"
         f"Year: {song.year or 'Unknown'}\nTagged genre: {song.genre or 'Unknown'}\n\n"
-        f"Lyrics:\n\"\"\"\n{song.lyrics[:2500]}\n\"\"\""
+        f"Lyrics:\n\"\"\"\n{(song.lyrics or '')[:2500]}\n\"\"\""
     )
     resp = model.generate_content(
         prompt,

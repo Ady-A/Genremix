@@ -93,7 +93,7 @@ def generate_hints(song: SongData) -> HintBundle:
         artist=song.artist,
         year=song.year or "Unknown",
         genre=song.genre or "Unknown",
-        lyrics=song.lyrics[:3000],
+        lyrics=( song.lyrics or "(lyrics unavailable)")[:3000],
     )
     response = model.generate_content(
         prompt,
@@ -113,5 +113,5 @@ def generate_hints(song: SongData) -> HintBundle:
             jargon_type=jt.get("jargon_type", "Corporate"),
         ),
         biographical_riddle=data["biographical_riddle"],
-        obfuscated_snippet=_build_obfuscated_snippet(song.lyrics),
+        obfuscated_snippet=_build_obfuscated_snippet(song.lyrics or ""),
     )
