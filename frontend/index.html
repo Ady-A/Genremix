@@ -645,9 +645,7 @@ const Game = (() => {
     el.classList.add('open');
     if (layer === 1) { el.textContent = content; }
     else if (layer === 2 && typeof content === 'object') {
-      el.innerHTML = `<p class="text-slate-500 text-xs mb-1">Original:</p>
-        <p class="italic border-l-2 border-purple-700 pl-2 mb-2">${esc(content.original_line)}</p>
-        <p class="text-slate-500 text-xs mb-1">${esc(content.jargon_type)} version:</p>
+      el.innerHTML = `<p class="text-slate-500 text-xs mb-1">${esc(content.jargon_type)} version:</p>
         <p class="mono text-xs leading-relaxed">${esc(content.translation)}</p>`;
     } else if (layer === 3) { el.textContent = content; }
     else { el.innerHTML = esc(content).replace(/█+/g, m => `<span class="text-purple-400 bg-purple-900/20 rounded px-0.5">${m}</span>`); }
