@@ -136,7 +136,8 @@ async def _try_start_session() -> None:
         _queue = players + _queue
         return
 
-    weights  = analyze_genres(song)
+    loop     = asyncio.get_event_loop()
+    weights  = await loop.run_in_executor(None, analyze_genres, song)
     pos      = calculate_position(weights)
     sid      = str(uuid.uuid4())
 
@@ -218,7 +219,7 @@ async def handle_websocket(ws: WebSocket) -> None:
                     await _send(player, {"type": "error", "message": "Song not found — try another"})
                     continue
 
-                g_weights = analyze_genres(song)
+                g_weights = await asyncio.get_event_loop().run_in_executor(None, analyze_genres, song)
                 g_pos     = calculate_position(g_weights)
                 dist      = math.sqrt(
                     (g_pos[0] - session.secret_pos[0]) ** 2 +

@@ -77,7 +77,7 @@ async def _start(mode: str):
                   else song_db.pick_random(genius_token))
     if not song:
         raise HTTPException(503, "No songs available — try again shortly")
-    weights = analyze_genres(song)
+    weights = await asyncio.get_event_loop().run_in_executor(None, analyze_genres, song)
     pos = calculate_position(weights)
     sid = str(uuid.uuid4())
     _sessions[sid] = GenreSession(secret=song, secret_pos=pos, secret_weights=weights)
@@ -119,7 +119,7 @@ async def submit_guess(body: dict):
     correct = (song.title.lower() == session.secret.title.lower() and
                song.artist.lower() == session.secret.artist.lower())
 
-    weights = analyze_genres(song)
+    weights = await asyncio.get_event_loop().run_in_executor(None, analyze_genres, song)
     pos  = calculate_position(weights)
     dist = _dist(pos, session.secret_pos)
     temp = temperature(dist)
